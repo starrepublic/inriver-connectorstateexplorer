@@ -1,0 +1,74 @@
+﻿<UserControl x:Class="StarRepublic.Ipmc.ConnectorStateExplorer.Application.View.AllConnectorStatesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StarRepublic.Ipmc.ConnectorStateExplorer.Application.View"
+             xmlns:viewmodel="clr-namespace:StarRepublic.Ipmc.ConnectorStateExplorer.Application.ViewModel"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewmodel:AllConnectorStatesViewModel, IsDesignTimeCreatable=False}">
+
+    <UserControl.Resources>
+        <CollectionViewSource
+            x:Key="ConnectorStateGroups"
+            Source="{Binding Path=ConnectorStates}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="ConnectorId"/>
+            </CollectionViewSource.GroupDescriptions>
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="ConnectorId" Direction="Ascending"/>
+                <scm:SortDescription PropertyName="Id" Direction="Ascending"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+
+    <Grid>
+        <ListView
+            ItemsSource="{Binding Source={StaticResource ConnectorStateGroups}}"
+            SelectedItem="{Binding SelectedConnectorState}"
+            SelectionChanged="ConnectorStateListView_OnSelectionChanged"
+            x:Name="ConnectorStateListView"
+            VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+            VirtualizingPanel.ScrollUnit="Item"
+            VirtualizingPanel.VirtualizationMode="Recycling">
+
+            <ListView.View>
+                <GridView >
+                    <GridViewColumn Header="Id" Width="Auto" DisplayMemberBinding="{Binding Id}"/>
+                    <GridViewColumn Header="Created" Width="Auto" DisplayMemberBinding="{Binding Created, StringFormat=u}"/>
+                    <GridViewColumn Header="Modified" Width="Auto" DisplayMemberBinding="{Binding Modified, StringFormat=u}"/>
+                    <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding Data}"/>
+                </GridView>
+            </ListView.View>
+
+            <ListBox.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding ItemCount}" Margin="10,0,0,0"/>
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <ItemsPresenter/>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </ListBox.GroupStyle>
+
+        </ListView>
+
+    </Grid>
+
+</UserControl>

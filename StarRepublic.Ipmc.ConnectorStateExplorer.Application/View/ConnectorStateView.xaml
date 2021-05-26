@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="StarRepublic.Ipmc.ConnectorStateExplorer.Application.View.ConnectorStateView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:StarRepublic.Ipmc.ConnectorStateExplorer.Application.View"
+             xmlns:viewModel="clr-namespace:StarRepublic.Ipmc.ConnectorStateExplorer.Application.ViewModel"
+             xmlns:converter="clr-namespace:StarRepublic.Ipmc.ConnectorStateExplorer.Application.Converter"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance viewModel:ConnectorStateViewModel, IsDesignTimeCreatable=False}"
+             x:Name="ConnectorStateViewUserControl">
+
+    <UserControl.Resources>
+        <converter:ObjectToBooleanConverter x:Key="ObjectToBooleanConverter"/>
+        <converter:TextConverter x:Key="TextConverter"/>
+    </UserControl.Resources>
+
+    <Grid IsEnabled="{Binding Converter={StaticResource ObjectToBooleanConverter}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <HeaderedContentControl Grid.Row="0" Grid.Column="0" Header="Id">
+            <TextBox IsReadOnly="True" Text="{Binding Id, Mode=OneWay}"/>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Grid.Row="0" Grid.Column="1" Header="Connector Id" Margin="5,0,0,5" >
+            <ComboBox IsEditable="True" Text="{Binding ConnectorId}" ItemsSource="{Binding ElementName=ConnectorStateViewUserControl, Path=ConnectorIds}"/>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Grid.Row="1" Grid.Column="0" Header="Created" >
+            <TextBox IsReadOnly="True" Text="{Binding Created, StringFormat=u, Mode=OneWay}"/>
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Grid.Row="1" Grid.Column="1" Header="Modified" Margin="5,0,0,5">
+            <TextBox IsReadOnly="True" Text="{Binding Modified, StringFormat=u, Mode=OneWay}"/>
+        </HeaderedContentControl>
+
+        <TextBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                 Text="{Binding Path=Data, Converter={StaticResource TextConverter}}"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Auto"/>
+    </Grid>
+</UserControl>
