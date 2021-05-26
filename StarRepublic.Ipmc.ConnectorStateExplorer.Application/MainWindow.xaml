@@ -1,0 +1,86 @@
+﻿<Window x:Class="StarRepublic.Ipmc.ConnectorStateExplorer.Application.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:view="clr-namespace:StarRepublic.Ipmc.ConnectorStateExplorer.Application.View"
+        xmlns:viewmodel="clr-namespace:StarRepublic.Ipmc.ConnectorStateExplorer.Application.ViewModel"
+        mc:Ignorable="d"
+        Title="Connector State Explorer" Icon="starrepublic.ico" Height="600" Width="1000"
+        d:DataContext="{d:DesignInstance viewmodel:MainWindowViewModel, IsDesignTimeCreatable=False}">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <view:AllIpmcEndpointsView
+            Grid.Row="0"
+            Margin="5"
+            DataContext="{Binding AllIpmcEndpointsViewModel}"/>
+
+        <Grid Grid.Row="1">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <view:AllConnectorStatesView
+                Grid.Column="0" Grid.Row="0"
+                Margin="5"
+                x:Name="AllConnectorStatesView"
+                DataContext="{Binding AllConnectorStatesViewModel}"/>
+
+            <GridSplitter Grid.Column="1" Grid.Row="0" Width="5" HorizontalAlignment="Stretch" Margin="5"/>
+
+            <view:ConnectorStateView
+                x:Name="ConnectorStateView"
+                Grid.Column="2" Grid.Row="0"
+                Margin="5"
+                DataContext="{Binding AllConnectorStatesViewModel.SelectedConnectorState}"
+                ConnectorIds="{Binding ElementName=AllConnectorStatesView, Path=DataContext.ConnectorIds}"/>
+
+
+            <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" Margin="5">
+                <Button
+                    Content="Reload all"
+                    Width="100"
+                    Command="{Binding AllConnectorStatesViewModel.ReloadCommand}"/>
+
+                <Button
+                    Content="Delete"
+                    Width="100"
+                    Margin="5,0,0,0"
+                    Command="{Binding AllConnectorStatesViewModel.DeleteCommand}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" Margin="5">
+                <Button
+                    Content="Add new"
+                    Width="100"
+                    Margin="5,0,0,0"
+                    Command="{Binding AllConnectorStatesViewModel.CreateCommand}"
+                    CommandParameter="{Binding ElementName=ConnectorStateView}"/>
+
+                <Button
+                    Content="Save"
+                    Width="100"
+                    Margin="5,0,0,0"
+                    Command="{Binding AllConnectorStatesViewModel.SaveCommand}"
+                    CommandParameter="{Binding ElementName=ConnectorStateView, Path=DataContext}"/>
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+
+</Window>
